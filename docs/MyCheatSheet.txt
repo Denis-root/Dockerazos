@@ -1,0 +1,59 @@
+Docker instalando postgres:
+
+
+https://hub.docker.com/_/postgres
+
+docker pull  docker pull postgres:16.2-alpine3.19
+
+Configurando
+
+--name : es el nombre de la instancia que estamos haciendo de la imagen
+-e : enviroment, son variables de entorno, cada imagen las define, se lee en la pagina oficial del hub
+-p : el port mapping, es el puerto que estara exponiendo entre el docker y el host, el de la izquierda es el host, el de la derecha el docker
+-d : modo detached, es para que al dar enter nos devuelva el control de la consola y no se quede pegado en el log
+--network : nombre de la red, para que se pueda conectar con otros contenedores
+
+docker run --name poc1-postgres -p5432:5432 -e POSTGRES_PASSWORD=D1234 -d postgres:16.2-alpine3.19
+
+docker create --name poc1-postgres -p5432:5432 --network mired -e POSTGRES_PASSWORD=D1234 postgres:16.2-alpine3.19
+
+Devuelve en la siguiente linea el id de la imagen, el cual se puede referenciar o el nombre que se coloco:
+
+33497fef05d9a7f135d86a417e4738e67b6394024f57b7160831125db9cefe5d  ===>>> poc1-postgres
+
+
+Listando contenedores creados:
+docker ps -a
+
+Eliminar contenedores
+docker strop nombre_contenedor
+docker rm nombre_contenedor
+
+Listando imagenes de dockers descargadas:
+docker images
+
+Eliminar una image:
+docker rmi nombre_imagen:etiqueta
+
+
+Listar las redes disponnibles, creadas para comunicar entre dockers
+docker network ls
+
+Crear una red, mired=nombre_deseado
+docker network create mired
+
+Eliminar la red, mired=nombre_deseado:
+docker network rm mired
+
+Crear imagenes en base de un archivo Dockerfile creado por nosotros:
+>>Posee 2 argumentos: 
+1) -t miapp:1 -----> el nombre miapp el nombre, : es una etiqueta, que puede ser el versionado
+2) . ------> la ruta, tiene que ser donde esta el archivo Dockerfile
+docker build -t miapp:1 .
+
+
+Creando contenedor con imagen creada por nosotros:
+docker create -p3000:3000 --name nodos --network mired miapp:1
+
+Logs de contenendores:
+docker logs nombre_contenedor
