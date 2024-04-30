@@ -1,0 +1,21 @@
+1 Bajar la imagen de node
+docker pull node:20
+
+2 Bajar la imagen de postgresql
+docker pull postgres:16.2-alpine3.19
+
+3 Crear una red
+docker network create mired
+
+4 Crear el contenedor de postgresl y cofigurarlo
+docker create --name poc1-postgres -p5432:5432 --network mired -e POSTGRES_PASSWORD=D1234 postgres:16.2-alpine3.19
+
+5 crear archivo Dockerfile con instrucciones para crear la imagen de este proyecto node, crear la imagen con el comando
+docker build -t miapp:1 .
+
+6 Crear un contenedor en base a la imagen anterior creada
+docker create -p3000:3000 --name nodos --network mired miapp:1
+
+7 iniciar los contendores
+docker start poc1-postgres
+docker start nodos
